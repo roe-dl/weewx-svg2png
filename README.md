@@ -83,7 +83,7 @@ Add a thumbnail reference to the header section of the web page like this:
 
 ```
         <meta name="twitter:image" content="https://www.example.com/index_thumbnail.png" />
-        <meta name="og:image" content="https://www.example.com/index_thumbnail.png" />
+        <meta property="og:image" content="https://www.example.com/index_thumbnail.png" />
 ```
 
 ## References
