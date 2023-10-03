@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="150" height="120" viewBox="0 0 150 120">
+  <style>
+    text {
+        font-family: Roboto, sans-serif;
+        font-weight: 300;
+        line-height: 1.625;
+        margin: 0;
+    }
+    text.big {
+        font-size: 32px;
+    }
+    text.small {
+        font-size: 16px;
+    }
+    text.timestamp {
+        font-size: 12px;
+    }
+  </style>
+  <text x="10" y="40" class="big">25,4</text>
+  <text x="140" y="45" class="small" text-anchor="end" stroke="red">26,8 &#176;C</text>
+  <text x="140" y="25" class="small" text-anchor="end" stroke="blue">7,8 &#176;C</text>
+  <text x="75" y="110" class="timestamp" text-anchor="middle">03.10.2023 15:20:00</text>
+  <path d="
+    M10.0,55.55892070484587
+    L15.625,56.2298539729157
+    L21.25,59.85557187143092
+    L26.875,69.61402757382936
+    L32.5,76.03283569913528
+    L38.125,79.13195464186654
+    L43.75,80.48621308533204
+    L49.375,81.5590838635993
+    L55.0,83.22406795562084
+    L60.625,82.73340267580356
+    L66.25,79.29056534508078
+    L71.875,82.85162546908143
+    L77.5,86.40163566650351
+    L83.125,87.4184716103769
+    L88.75,89.09023698808942
+    L94.375,84.90297152879752
+    L100.0,80.07071300375267
+    L105.625,69.71312000326319
+    L111.25,63.84586220813905
+    L116.875,57.99161771904065
+    L122.5,57.014827051721376
+    L128.125,57.10897984989399
+    L133.75,56.38064121390115
+    L139.375,56.86877957252407
+  " stroke="#7cb5ec" stroke-width="3" fill="none" />
+</svg>

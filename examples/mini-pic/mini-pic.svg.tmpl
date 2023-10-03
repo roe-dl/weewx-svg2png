@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="150" height="120" viewBox="0 0 150 120">
+  <style>
+    text {
+        font-family: Roboto, sans-serif;
+        font-weight: 300;
+        line-height: 1.625;
+        margin: 0;
+    }
+    text.big {
+        font-size: 32px;
+    }
+    text.small {
+        font-size: 16px;
+    }
+    text.timestamp {
+        font-size: 12px;
+    }
+  </style>
+  ## temperature readings
+  <text x="10" y="40" class="big">$current.outTemp.format(add_label=False)</text>
+  <text x="140" y="45" class="small" text-anchor="end" stroke="red">$day.outTemp.max</text>
+  <text x="140" y="25" class="small" text-anchor="end" stroke="blue">$day.outTemp.min</text>
+  ## timestamp
+  <text x="75" y="110" class="timestamp" text-anchor="middle">$current.dateTime</text>
+  ## temperature graph
+  #set $timespan=$span($hour_delta=24)
+  #set $min_outTemp=$timespan.outTemp.min.raw
+  #set $max_outTemp=$timespan.outTemp.max.raw
+  #set $y1=90
+  #set $y2=55
+  #set $cc='M'
+  <path d="
+  #for ($start,$stop,$val) in $timespan.outTemp.series(aggregate_type='avg',aggregate_interval='hour')
+  #set $yy = ($val.raw-$min_outTemp)/($max_outTemp-$min_outTemp)*($y2-$y1)+$y1
+  #set $xx = ($start.raw-$timespan.start.raw)/($timespan.end.raw-$timespan.start.raw)*135+10
+    $cc$xx,$yy
+  #set $cc='L'
+  #end for
+  " stroke="#7cb5ec" stroke-width="3" fill="none" />
+  #set $cc='M'
+</svg>
