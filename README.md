@@ -85,3 +85,13 @@ Add a thumbnail reference to the header section of the web page like this:
         <meta name="twitter:image" content="https://www.example.com/index_thumbnail.png" />
         <meta name="og:image" content="https://www.example.com/index_thumbnail.png" />
 ```
+
+## References
+
+* [WeeWX website](https://www.weewx.com)
+* [WeeWX information in german](https://www.woellsdorf-wetter.de/software/weewx.html)
+* [WeeWX customization guide](https://www.weewx.com/docs/customizing.htm)
+  (See this guide for writing templates.)
+* [Calculation in templates](https://github.com/weewx/weewx/wiki/calculate-in-templates)
+* [Tags for series](https://github.com/weewx/weewx/wiki/Tags-for-series)
+* [CairoSVG website](https://cairosvg.org)
