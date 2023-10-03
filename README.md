@@ -47,17 +47,26 @@ This is for use in skins. Add a reference to this generator to the
 ```
     
 Then, add a section to `skin.conf` to configure the files to be
-converted:
+created as SVG and converted to PNG (replace `index_thumbnail` by
+your file name and `file1` to something reasonable for you):
     
 ```
+[CheetahGenerator]
+    ...
+    [[ToDate]]
+        ...
+        [[[file1]]]
+            template = index_thumbnail.svg.tmpl
+...
 [SVGtoPNGGenerator]
     [[file1]]
         # file name without extension (optional)
-        file = replace_me
+        file = index_thumbnail
         # image width in pixels (optional)
         width = replace_me
         # image height in pixels (optional)
         height = replace_me
+    ...
 ```
     
 If width and height are not provided, they will be taken out of the 
@@ -66,6 +75,9 @@ SVG file header.
 If the `file` key is missing, the section name is used instead.
     
 ## Usage
+
+See the examples directory for an example WeeWX template to create an
+SVG file.
 
 Add a thumbnail reference to the header section of the web page like this:
 
