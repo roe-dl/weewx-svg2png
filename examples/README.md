@@ -14,4 +14,4 @@ This is a very basic example to show how it works.
 This is an advanced example creating a thumbnail image for the
 Belchertown skin.
 
-<img src="thumnail/index_thumbnail.png" width="300" />
+<img src="thumbnail/index_thumbnail.png" width="300" />
