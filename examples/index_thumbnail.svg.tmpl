@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+## SVG template example
+## Copyright (C) 2023, Johanna Roedenbeck
+##
+#set use_presentweather_tag = True
+#set $relative_url = "."
+#set $embedded_images = False
+#set $base_path = '/var/www/html/weewx/belchertown'
+#set $logo_image_file = 'logo.png'
+#set $radar_image_file = 'dwd/bwk_bodendruck_na_ana.png'
+##
+#import math
+#import base64
+#def get_outTemp_color(x)
+#if $x is not None
+#set $outTemp=$x.degree_C.raw
+#if $outTemp is not None
+color:#slurp
+#if $outTemp <= -17.8 
+\#1278c8#slurp
+#else if $outTemp <= -3.8
+\#30bfef#slurp
+#else if $outTemp <= 0 
+\#1fafdd#slurp
+#else if $outTemp <= 4.4
+rgba(0,172,223,1)#slurp
+#else if $outTemp <= 10
+\#71bc3c#slurp
+#else if $outTemp <= 12.7
+rgba(90,179,41,0.8)#slurp
+#else if $outTemp <= 18.3
+rgba(131,173,45,1)#slurp
+#else if $outTemp <= 21.1
+rgba(206,184,98,1)#slurp
+#else if $outTemp <= 23.8
+rgba(255,174,0,0.9)#slurp
+#else if $outTemp <= 26.6
+rgba(255,153,0,0.9)#slurp
+#else if $outTemp <= 29.4
+rgba(255,127,0,1)#slurp
+#else if $outTemp <= 32.2
+rgba(255,79,0,0.9)#slurp
+#else if $outTemp <= 35
+rgba(255,69,69,1)#slurp
+#else if $outTemp <= 43.3
+rgba(255,104,104,1)#slurp
+#else 
+rgba(218,113,113,1)#slurp
+#end if
+#end if
+#end if
+#end def
+## encode images for embedding
+#if $embedded_images
+#set $fp=open($base_path+'/'+$logo_image_file,'rb')
+#set $logo_image=base64.b64encode($fp.read())
+#silent $fp.close()
+#set $fp=open($base_path+'/'+$radar_image_file,'rb')
+#set $radar_image=base64.b64encode($fp.read())
+#silent $fp.close()
+#end if
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" height="600" viewBox="-15 -15 1230 922.5">
+  <style>
+    text {
+        font-family: Roboto, sans-serif;
+        font-size: 18px;
+        font-weight: 300;
+        line-height: 1.625;
+        margin: 0;
+    }
+    text.big {
+        font-size: 32px;
+    }
+    text.tempvalue {
+        font-size: 65px;
+    }
+    text.sun-moon-title {
+        font-size: 25px;
+    }
+    text.curwindspeed {
+        font-size: 32px;
+    }
+    text.curwindgust {
+        font-size: 32px;
+    }
+    text.graphtitle {
+        font-size: 25px;
+    }
+  </style>
+  ## page header
+  #if $embedded_images
+  <image width="330" height="80" x="0" y="3" href="data:image/png;base64,$logo_image" />
+  #else
+  <image href="$relative_url/$logo_image_file" width="330" height="80" x="0" y="3" />
+  #end if
+  <text x="1200" y="43" dominant-baseline="middle" text-anchor="end">$obs.label.powered_by</text>
+  ## status text
+  <text x="0" y="100">Zuletzt aktualisiert am $current.dateTime</text>
+  ## lines
+  <g stroke="#D7D7D7" stroke-width="1">
+    <line x1="0" y1="115" x2="1200" y2="115" />
+    <line x1="400" y1="115" x2="400" y2="490" />
+    <line x1="700" y1="115" x2="700" y2="490" />
+    <line x1="0" y1="490" x2="1200" y2="490" />
+    <line x1="0" y1="349" x2="700" y2="349" />
+    <line x1="600" y1="490" x2="600" y2="832.5" /> 
+  </g>
+  ## observations area
+  #set $yy=115+22
+  #for $obstype in $Extras.station_observations
+  <text x="415" y="$yy" text-anchor="start">$getVar('obs.label.'+$obstype)</text>
+  #if $obstype=='rainWithRainRate'
+  <text x="550" y="$yy" class="$obstype" text-anchor="start">$day.rain.sum</text>
+  #else
+  <text x="550" y="$yy" class="$obstype" text-anchor="start">$getVar('current.'+$obstype)</text>
+  #end if
+  #set $yy+=29
+  #end for
+  ## radar image area
+  #if $embedded_images
+  <image width="488" height="346.25" x="715" y="130" href="data:image/png;base64,$radar_image" />
+  #else
+  <image href="$relative_url/$radar_image_file" width="485" height="344.11" x="715" y="130" />
+  #end if
+  ## temperature and present weather area
+  #if use_presentweather_tag
+  #set $wxicon_file = $presentweather(ww=int($current.ww.raw),n=$hour($data_binding='dwd_binding').cloudcover.avg.raw,night=$almanac.sun.alt<0).belchertown_icon
+  #else
+  #set $wxicon_file = $current_obs_icon
+  #end if
+  <image id="wxicon" href="$relative_url/images/$wxicon_file" width="128" height="100" x="15" y="130" />
+  #set $outTemp_color = $get_outTemp_color($current.outTemp)
+  <text x="200" y="199" class="tempvalue" style="$outTemp_color">$current.outTemp.format(add_label=False)</text>
+  <text x="330" y="169" class="big" style="$outTemp_color">$unit.label.outTemp.strip()</text>
+  <text x="200" y="249">$obs.label.feels_like: $current.THSW</text>
+  <text x="240" y="299" text-anchor="middle">max</text>
+  <text x="240" y="328" text-anchor="middle">$day.outTemp.max</text>
+  <text x="330" y="299" text-anchor="middle">min</text>
+  <text x="330" y="328" text-anchor="middle">$day.outTemp.min</text>
+  ## sun and moon area
+  <text x="415" y="379" class="sun-moon-title">$getVar('obs.label.sun_and_moon').replace('&','&amp;')</text>
+  <image href="$relative_url/images/sunrise.png" width="20" height="10" x="415" y="399" />
+  <text x="450" y="409">$almanac.sun.rise</text>
+  <image href="$relative_url/images/sunset.png" width="20" height="10" x="415" y="429" />
+  <text x="450" y="439">$almanac.sun.set</text>
+  <text x="685" y="439" text-anchor="end">$almanac.moon_fullness% $obs.label.moon_visible</text>
+  ## wind area
+  <text x="240" y="389" text-anchor="middle">$obs.label.wind_speed</text>
+  <text x="240" y="429" text-anchor="middle" class="curwindspeed">$current.windSpeed.format(add_label=False,None_string="--")</text>
+  <text x="330" y="389" text-anchor="middle">$obs.label.wind_gust</text>
+  <text x="330" y="429" text-anchor="middle" class="curwindgust">$current.windGust.format(add_label=False,None_string="--")</text>
+  <line x1="285" y1="369" x2="285" y2="429" stroke="#D7D7D7" stroke-width="1" />
+  <text x="285" y="458" text-anchor="middle">$unit.label.windSpeed.strip()</text>
+  <circle cx="100" cy="419.5" r="44" stroke="#828487" stroke-width="6" fill="none" />
+  <text x="100" y="414" class="curwinddir" text-anchor="middle">#slurp
+  #if $current.windDir.ordinal_compass == "N/A"
+--#slurp
+  #else
+$current.windDir.ordinal_compass#slurp
+  #end if
+</text>
+  <text x="100" y="434" text-anchor="middle" class="curwinddeg">$current.windDir.format(None_string="--")</text>
+  #set $dir=$current.windDir.raw
+  #if $dir is not None 
+  ##and $current.windSpeed.raw is not None and $current.windSpeed.raw>0
+  <g class="arrow" transform="rotate($dir,100,419.5)">
+    <path d="M100,419.5 m0,-32 l-6,-20 h12 z" fill="#c50a1d" />
+  </g>
+  #end if
+  <text x="300" y="525" class="graphtitle" text-anchor="middle">$obs.label.outTemp</text>
+  #set $timespan=$span($hour_delta=24)
+  #set $min_outTemp=min($timespan.outTemp.min.raw,$timespan.dewpoint.min.raw)
+  #set $max_outTemp=max($timespan.outTemp.max.raw,$timespan.dewpoint.max.raw)
+  #set $y1=817.5
+  #set $y2=540
+  #set $cc='M'
+  <path d="
+  #for ($start,$stop,$val) in $timespan.outTemp.series(aggregate_type=None)
+  #set $yy = ($val.raw-$min_outTemp)/($max_outTemp-$min_outTemp)*($y2-$y1)+$y1
+  #set $xx = ($start.raw-$timespan.start.raw)/($timespan.end.raw-$timespan.start.raw)*570+15
+    $cc$xx,$yy
+  #set $cc='L'
+  #end for
+  " stroke="#7cb5ec" stroke-width="5" fill="none" />
+  #set $cc='M'
+  <path d="
+  #for ($start,$stop,$val) in $timespan.dewpoint.series(aggregate_type=None)
+  #set $yy = ($val.raw-$min_outTemp)/($max_outTemp-$min_outTemp)*($y2-$y1)+$y1
+  #set $xx = ($start.raw-$timespan.start.raw)/($timespan.end.raw-$timespan.start.raw)*570+15
+    $cc$xx,$yy
+  #set $cc='L'
+  #end for
+  " stroke="#b2df8a" stroke-width="5" fill="none" />
+  <text x="900" y="525" class="graphtitle" text-anchor="middle">$obs.label.barometer</text>
+  #set $min_barometer=$timespan.barometer.min.raw
+  #set $max_barometer=$timespan.barometer.max.raw
+  #set $cc='M'
+  <path d="
+  #for ($start,$stop,$val) in $timespan.barometer.series(aggregate_type=None)
+  #set $yy = ($val.raw-$min_barometer)/($max_barometer-$min_barometer)*($y2-$y1)+$y1
+  #set $xx = ($start.raw-$timespan.start.raw)/($timespan.end.raw-$timespan.start.raw)*570+615
+    $cc$xx,$yy
+  #set $cc='L'
+  #end for
+  " stroke="#7cb5ec" stroke-width="5" fill="none" />
+  ## footer
+  <rect x="0" y="832.5" width="1200" height="60" fill="#D7D7D7" stroke="none" />
+  <text x="15" y="875" class="big">$station.station_url</text>
+</svg>
