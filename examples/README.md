@@ -3,11 +3,11 @@
 The examples include the WeeWX template file for use in skins and the
 resulting SVG and PNG files.
 
-## Mini-pic
+## Mini weather card
 
 This is a very basic example to show how it works.
 
-![mini-pic](mini-pic/mini-pic.png)
+![mini-weather-card](mini-weather-card/mini-weather-card.png)
 
 ## Thumbnail
 

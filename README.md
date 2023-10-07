@@ -3,7 +3,7 @@ Convert SVG to PNG during skin creation
 
 Using this generator you can
 * create thumbnail images for the web pages created by WeeWX
-* create weather mini-pics
+* create weather cards
 * put actual weather data onto webcam images
 
 It is intended to create the SVG files by the CheetahGenerator
