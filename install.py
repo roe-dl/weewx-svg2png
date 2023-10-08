@@ -15,5 +15,6 @@ class SVG2PNGInstaller(ExtensionInstaller):
             description='convert SVG to PNG files',
             author="Johanna Roedenbeck",
             author_email="",
+            config=dict(),
             files=[('bin/user', ['bin/user/svg2png.py'])]
             )
