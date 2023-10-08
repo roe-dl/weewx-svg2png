@@ -9,7 +9,7 @@ def loader():
 
 class SVG2PNGInstaller(ExtensionInstaller):
     def __init__(self):
-        super(SNMPInstaller, self).__init__(
+        super(SVG2PNGInstaller, self).__init__(
             version="0.1",
             name='SVG2PNG',
             description='convert SVG to PNG files',
