@@ -124,6 +124,9 @@ The examples include instructions how to
 * include images from image files like webcam pictures or weather symbols
 * create graphs of readings
 
+Another example, this time involving DWD forecasts, you find in the
+[weewx-DWD wiki](https://github.com/roe-dl/weewx-DWD/wiki/Kleines-Wetterbild).
+
 ### Thumbnail or preview image for social media references
 
 In social media posts that reference web pages you often see a preview
@@ -137,8 +140,8 @@ of your web page referencing it. Assuming your thumbnail is named
 like this:
 
 ```
-        <meta name="twitter:image" content="https://www.example.com/index_thumbnail.png" />
-        <meta property="og:image" content="https://www.example.com/index_thumbnail.png" />
+        <meta name="twitter:image" content="https://www.example.com/index_thumbnail.png?v=$current.dateTime.raw" />
+        <meta property="og:image" content="https://www.example.com/index_thumbnail.png?v=$current.dateTime.raw" />
 ```
 
 You can also specify wether the thumbnail is shown as a small image
@@ -156,6 +159,28 @@ description.
   ```
         <meta name="twitter:card" content="summary_large_image" />
   ```
+
+## Troubleshooting
+
+* See the syslog for messages containing `user.svg2png`. They may
+  reveal some reason for problems.
+* To log the file names and paths set `debug = 1` in `weewx.conf` and
+  restart WeeWX
+* If you see a log message like this
+  ```
+  Oct 12 15:21:08 XXXX weewx[12345] ERROR user.svg2png: URLError <urlopen error [Errno 2] Datei oder Verzeichnis nicht gefunden: '/var/www/html/somepath/somefile.jpg'>
+  ```
+  then there is a file reference within one of your templates that could
+  not be resolved. Check the template and fix the path.
+
+  Enter
+  ```
+  ls -l /var/www/html/somepath/somefile.jpg
+  ```
+  to see whether the file exists.
+* Relative paths are not the same as absolute paths. So for example
+  `webcam/snap.jpg` (without slash) is not the same as `/webcam/snap.jpg`
+  (with slash). Make sure you know the real location of your files.
 
 ## References
 
