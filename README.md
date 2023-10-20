@@ -181,6 +181,8 @@ description.
 * Relative paths are not the same as absolute paths. So for example
   `webcam/snap.jpg` (without slash) is not the same as `/webcam/snap.jpg`
   (with slash). Make sure you know the real location of your files.
+* Check file names carefully. For example `snap.jpeg` (including 
+  character e) is not the same as `snap.jpg` (without character e).
 
 ## References
 
