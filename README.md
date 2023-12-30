@@ -3,7 +3,7 @@ Convert SVG to PNG during skin creation
 
 mini weather card | thumbnail | webcam image | forecast
 ------------------|-----------|--------------|----------
-<img src="examples/mini-weather-card/mini-weather-card.png"  /> | <img src="examples/thumbnail/index_thumbnail.png" width="200px" /> | <img src="examples/webcam-with-weather-data/webcam.png" width="200px" /> | <img src="https://camo.githubusercontent.com/07848d68df4eaff7afc56a20c3f538fa10120b6643c432dd49cc799c10d31761/68747470733a2f2f7777772e776f656c6c73646f72662d7765747465722e64652f6d696e692d776561746865722d636172642d6c696768742e737667" width="200px" />
+<img src="examples/mini-weather-card/mini-weather-card.png"  /> | <img src="examples/thumbnail/index_thumbnail.png" width="200px" /> | <img src="examples/webcam-with-weather-data/webcam.png" width="200px" /> | <img src="https://www.woellsdorf-wetter.de/mini-weather-card-light.svg" width="200px" />
 
 Using this generator you can
 * create thumbnail images for the web pages created by WeeWX
@@ -33,8 +33,16 @@ This will install `python3-cairosvg` as well.
 
 2) run the installer
 
+   WeeWX up to version 4.X
+
    ```
    sudo wee_extension --install weewx-svg2png.zip
+   ```
+
+   WeeWX from version 5.0 on
+
+   ```
+   sudo weectl extension install weewx-svg2png.zip
    ```
 
 3) edit configuration in `skin.conf`
@@ -43,9 +51,18 @@ This will install `python3-cairosvg` as well.
 
 5) restart weewx
 
+   for SysVinit systems:
+
    ```
    sudo /etc/init.d/weewx stop
    sudo /etc/init.d/weewx start
+   ```
+
+   for systemd systems:
+
+   ```
+   sudo systemctl stop weewx
+   sudo systemctl start weewx
    ```
 
 ## Configuration instructions
