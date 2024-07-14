@@ -35,16 +35,23 @@ This will install `python3-cairosvg` as well.
 
    WeeWX up to version 4.X
 
-   ```
+   ```shell
    sudo wee_extension --install weewx-svg2png.zip
    ```
 
-   WeeWX from version 5.0 on
+   WeeWX from version 5.0 on and WeeWX packet installation
 
-   ```
+   ```shell
    sudo weectl extension install weewx-svg2png.zip
    ```
 
+   WeeWX from version 5.0 on and WeeWX pip installation into an virtual environment
+
+   ```shell
+   source ~/weewx-venv/bin/activate
+   weectl extension install weewx-svg2png.zip
+   ```
+   
 3) edit configuration in `skin.conf`
 
    See section "Configuration instructions"
@@ -53,14 +60,14 @@ This will install `python3-cairosvg` as well.
 
    for SysVinit systems:
 
-   ```
+   ```shell
    sudo /etc/init.d/weewx stop
    sudo /etc/init.d/weewx start
    ```
 
    for systemd systems:
 
-   ```
+   ```shell
    sudo systemctl stop weewx
    sudo systemctl start weewx
    ```
