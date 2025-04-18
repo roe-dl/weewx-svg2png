@@ -102,6 +102,14 @@ your file name and `file1` to something reasonable for you):
         width = replace_me
         # image height in pixels (optional)
         height = replace_me
+        # load external files (optional)
+        unsafe = True
+        # background color (optional, newer CairoSVG versions only)
+        background_color = '#fff'
+        # negate colors (optional, newer CairoSVG versions only)
+        negate_colors = false
+        # invert image (optional, newer CairoSVG versions only)
+        invert_images = false
     ...
 ```
     

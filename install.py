@@ -1,5 +1,5 @@
 # installer SVG2PNG
-# Copyright 2023 Johanna Roedenbeck
+# Copyright 2023, 2025 Johanna Karen Roedenbeck
 # Distributed under the terms of the GNU Public License (GPLv3)
 
 from weecfg.extension import ExtensionInstaller
@@ -10,7 +10,7 @@ def loader():
 class SVG2PNGInstaller(ExtensionInstaller):
     def __init__(self):
         super(SVG2PNGInstaller, self).__init__(
-            version="0.1",
+            version="0.2",
             name='SVG2PNG',
             description='convert SVG to PNG files',
             author="Johanna Roedenbeck",

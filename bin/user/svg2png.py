@@ -1,6 +1,6 @@
 #!/bin/python3
 # WeeWX generator to convert files from SVG to PNG using CairoSVG
-# Copyright (C) 2023 Johanna Roedenbeck
+# Copyright (C) 2023, 2025 Johanna Karen Roedenbeck
 
 """
 
@@ -58,7 +58,7 @@
     
 """
 
-VERSION = "0.1"
+VERSION = "0.2"
 
 import weewx
 import weewx.reportengine
@@ -113,6 +113,8 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
             width = generator_dict[section].get('width',None)
             # PNG image height in pixels
             height = generator_dict[section].get('height',None)
+            # Load external files
+            unsafe = weeutil.weeutil.to_bool(generator_dict[section].get('unsafe',True))
             try:
                 if file.endswith('.svg'):
                     fn = file[:-4]
@@ -124,10 +126,18 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
                 target = os.path.join(
                     target_path,
                     fn+'.png')
-                cairosvg.svg2png(url=source,
-                                 write_to=target,
-                                 output_width=width,
-                                 output_height=height)
+                parameters = { 'url':source,
+                                 'write_to':target,
+                                 'output_width':width,
+                                 'output_height':height,
+                                 'unsafe':unsafe }
+                for para in ('background_color','negate_colors','invert_images'):
+                    if para in generator_dict[section]:
+                        x = generator_dict[section][para]
+                        if x in {'negate_colors','invert_images'}:
+                            x = weeutil.weeutil.to_bool(x)
+                        parameters[para] = x
+                cairosvg.svg2png(**parameters)
                 ct += 1
                 logdbg('%s --> %s' % (source,target))
             except (LookupError,TypeError,ValueError,OSError) as e:
