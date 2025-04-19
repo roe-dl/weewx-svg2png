@@ -110,6 +110,13 @@ your file name and `file1` to something reasonable for you):
         negate_colors = false
         # invert image (optional, newer CairoSVG versions only)
         invert_images = false
+        # parent width and height (optional)
+        parent_width = None
+        parent_height = None
+        # dpi setting (optional)
+        dpi = 96
+        # scale factor (optional)
+        scale = 1
     ...
 ```
     

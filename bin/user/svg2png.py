@@ -46,6 +46,21 @@
             width = replace_me
             # image height in pixels (optional)
             height = replace_me
+            # load external files (optional)
+            unsafe = True
+            # background color (optional, newer CairoSVG versions only)
+            background_color = '#fff'
+            # negate colors (optional, newer CairoSVG versions only)
+            negate_colors = false
+            # invert image (optional, newer CairoSVG versions only)
+            invert_images = false
+            # parent width and height (optional)
+            parent_width = None
+            parent_height = None
+            # dpi setting (optional)
+            dpi = 96
+            # scale factor (optional)
+            scale = 1
     ```
     
     If width and height are not provided, they will be taken out of the 
@@ -85,6 +100,16 @@ except ImportError:
     has_cairosvg = False
 
 class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
+
+    OPTIONS = (
+        ('background_color',str),
+        ('negate_colors',weeutil.weeutil.to_bool),
+        ('invert_images',weeutil.weeutil.to_bool),
+        ('dpi',weeutil.weeutil.to_int),
+        ('parent_width',weeutil.weeutil.to_int), 
+        ('parent_height',weeutil.weeutil.to_int),
+        ('scale',weeutil.weeutil.to_float)
+    )
 
     def run(self):
         
@@ -131,12 +156,9 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
                                  'output_width':width,
                                  'output_height':height,
                                  'unsafe':unsafe }
-                for para in ('background_color','negate_colors','invert_images'):
-                    if para in generator_dict[section]:
-                        x = generator_dict[section][para]
-                        if x in {'negate_colors','invert_images'}:
-                            x = weeutil.weeutil.to_bool(x)
-                        parameters[para] = x
+                for para in SVGtoPNGGenerator.OPTIONS:
+                    if para[0] in generator_dict[section]:
+                        parameters[para[0]] = para[1](generator_dict[section][para[0]])
                 cairosvg.svg2png(**parameters)
                 ct += 1
                 logdbg('%s --> %s' % (source,target))
