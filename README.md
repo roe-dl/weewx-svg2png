@@ -233,7 +233,7 @@ description.
 * [WeeWX information in german](https://www.woellsdorf-wetter.de/software/weewx.html)
 * [WeeWX customization guide](https://www.weewx.com/docs/customizing.htm)
   (See this guide for writing templates.)
-* [Calculation in templates](https://github.com/weewx/weewx/wiki/calculate-in-templates)
+* [Calculation in templates](https://web.archive.org/web/20230306134157/https://github.com/weewx/weewx/wiki/calculate-in-templates)
 * [Tags for series](https://github.com/weewx/weewx/wiki/Tags-for-series)
 * [CairoSVG website](https://cairosvg.org)
 * [The Belchertown skin](https://github.com/poblabs/weewx-belchertown)
