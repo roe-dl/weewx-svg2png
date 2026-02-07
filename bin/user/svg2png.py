@@ -104,7 +104,7 @@ except ImportError:
 
 class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
 
-    OPTIONS = (
+    CAIRO_OPTIONS = (
         ('background_color',str),
         ('negate_colors',weeutil.weeutil.to_bool),
         ('invert_images',weeutil.weeutil.to_bool),
@@ -114,11 +114,17 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
         ('scale',weeutil.weeutil.to_float)
     )
 
+    RSVG_OPTIONS = (
+        ('background_color','-b',str),
+        ('scale','-z',weeutil.weeutil.to_float),
+        ('dpi','-d',weeutil.weeutil.to_int),
+        ('dpi','-p',weeutil.weeutil.to_int),
+        ('stylesheet','-s',str)
+    )
+
     def run(self):
         
-        if not has_cairosvg:
-            logerr('Missing CairoSVG. Install it to use this extension.')
-            return
+        msg_cairosvg = True
         
         # determine how much logging is desired
         log_success = weeutil.weeutil.to_bool(weeutil.config.search_up(self.skin_dict, 'log_success', True))
@@ -160,23 +166,32 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
                     target_path,
                     fn+'.png')
                 if converter.lower()=='cairosvg':
-                    parameters = { 'url':source,
+                    if not has_cairosvg:
+                        if msg_cairosvg:
+                            logerr('Missing CairoSVG. Install it to use this extension.')
+                            msg_cairosvg = False
+                        continue
+                    parameters = {'url':source,
                                  'write_to':target,
                                  'output_width':width,
                                  'output_height':height,
                                  'unsafe':unsafe }
-                    for para in SVGtoPNGGenerator.OPTIONS:
+                    for para in SVGtoPNGGenerator.CAIRO_OPTIONS:
                         if para[0] in generator_dict[section]:
                             parameters[para[0]] = para[1](generator_dict[section][para[0]])
                     cairosvg.svg2png(**parameters)
                     ct += 1
                 elif converter.lower()=='rsvg2':
                     parameters = [rsvg_cmd]
+                    for para in SVGtoPNGGenerator.RSVG_OPTIONS:
+                        if para[0] in generator_dict[section]:
+                            parameters.extend([para[1],para[2](generator_dict[section][para[0]])])
                     if width is not None:
                         parameters.extend(['-w',str(width)])
                     if height is not None:
                         parameters.extens(['-h',str(height)])
                     parameters.extend([
+                        '-f','png',
                         source,
                         '-o',
                         target

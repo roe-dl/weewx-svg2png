@@ -124,7 +124,7 @@ your file name and `file1` to something reasonable for you):
         # scale factor (optional)
         scale = 1
         # converter to use ('cairosvg' or 'rsvg2', optional)
-        converter = cairo
+        converter = cairosvg
     ...
 ```
     
