@@ -2,3 +2,5 @@
 * initial version
 0.2
 * new options for newer CairoSVG versions
+0.3
+* support different converters

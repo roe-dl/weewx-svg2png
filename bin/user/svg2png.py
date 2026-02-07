@@ -1,6 +1,6 @@
 #!/bin/python3
 # WeeWX generator to convert files from SVG to PNG using CairoSVG
-# Copyright (C) 2023, 2025 Johanna Karen Roedenbeck
+# Copyright (C) 2023, 2025, 2026 Johanna Karen Roedenbeck
 
 """
 
@@ -61,6 +61,8 @@
             dpi = 96
             # scale factor (optional)
             scale = 1
+            # converter to use ('cairosvg' or 'rsvg2')
+            converter = cairosvg
     ```
     
     If width and height are not provided, they will be taken out of the 
@@ -73,7 +75,7 @@
     
 """
 
-VERSION = "0.2"
+VERSION = "0.3"
 
 import weewx
 import weewx.reportengine
@@ -82,6 +84,7 @@ import weeutil.config
 import os.path
 import configobj
 import time
+import subprocess
 
 import weeutil.logger
 import logging
@@ -129,8 +132,11 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
         # configuration section for this generator
         generator_dict = self.skin_dict.get('SVGtoPNGGenerator',configobj.ConfigObj())
         
+        rsvg_cmd = generator_dict.get('rsvg_cmd','/usr/bin/rsvg-convert')
+        
         start_ts = time.time()
         ct = 0
+        pids = []
         for section in generator_dict.sections:
             # file name
             file = generator_dict[section].get('file',section)
@@ -140,6 +146,8 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
             height = generator_dict[section].get('height',None)
             # Load external files
             unsafe = weeutil.weeutil.to_bool(generator_dict[section].get('unsafe',True))
+            # Converter
+            converter = generator_dict[section].get('converter',generator_dict.get('converter','cairosvg'))
             try:
                 if file.endswith('.svg'):
                     fn = file[:-4]
@@ -151,20 +159,43 @@ class SVGtoPNGGenerator(weewx.reportengine.ReportGenerator):
                 target = os.path.join(
                     target_path,
                     fn+'.png')
-                parameters = { 'url':source,
+                if converter.lower()=='cairosvg':
+                    parameters = { 'url':source,
                                  'write_to':target,
                                  'output_width':width,
                                  'output_height':height,
                                  'unsafe':unsafe }
-                for para in SVGtoPNGGenerator.OPTIONS:
-                    if para[0] in generator_dict[section]:
-                        parameters[para[0]] = para[1](generator_dict[section][para[0]])
-                cairosvg.svg2png(**parameters)
-                ct += 1
+                    for para in SVGtoPNGGenerator.OPTIONS:
+                        if para[0] in generator_dict[section]:
+                            parameters[para[0]] = para[1](generator_dict[section][para[0]])
+                    cairosvg.svg2png(**parameters)
+                    ct += 1
+                elif converter.lower()=='rsvg2':
+                    parameters = [rsvg_cmd]
+                    if width is not None:
+                        parameters.extend(['-w',str(width)])
+                    if height is not None:
+                        parameters.extens(['-h',str(height)])
+                    parameters.extend([
+                        source,
+                        '-o',
+                        target
+                    ])
+                    pids.append(subprocess.Popen(parameters))
                 logdbg('%s --> %s' % (source,target))
             except (LookupError,TypeError,ValueError,OSError) as e:
                 if log_failure:
                     logerr('%s %s' % (e.__class__.__name__,e))
+        if pids:
+            # wait for the processes to finish, at most 5 seconds
+            t = 5
+            while pids and t:
+                time.sleep(1)
+                for pid in pids:
+                    if pid.poll() is not None:
+                        pids.remove(pid)
+                        ct += 1
+                t -= 1
         end_ts = time.time()
         if log_success:
             loginf('Created %s PNG file%s in %.2f seconds' % (ct,'' if ct==1 else 's',end_ts-start_ts))

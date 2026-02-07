@@ -17,11 +17,17 @@ functionality of WeeWX.
 
 First, install CairoSVG, if it is not already there.
 
-```
+```shell
 sudo apt-get install cairosvg
 ```
 
 This will install `python3-cairosvg` as well.
+
+Alternatively you can install librsvg2-bin.
+
+```shell
+sudo apt-get install librsvg2-bin
+```
 
 ## Installation instructions
 
@@ -117,6 +123,8 @@ your file name and `file1` to something reasonable for you):
         dpi = 96
         # scale factor (optional)
         scale = 1
+        # converter to use ('cairosvg' or 'rsvg2', optional)
+        converter = cairo
     ...
 ```
     
@@ -226,6 +234,8 @@ description.
   (with slash). Make sure you know the real location of your files.
 * Check file names carefully. For example `snap.jpeg` (including 
   character e) is not the same as `snap.jpg` (without character e).
+* If you experience erroneous results, you may want to try another
+  converter. You can do so on a per file basis.
 
 ## References
 
